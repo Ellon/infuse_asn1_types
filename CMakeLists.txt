@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.0)
-project(cdff_types VERSION 1.0)
+project(cdff_types VERSION 1.0 )
+
+execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/GeneratorScript.sh
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 # These glob is annoying but necessary as we don't know in advance how many types are present
 file(GLOB_RECURSE type_list_src
@@ -8,10 +11,11 @@ file(GLOB_RECURSE type_list_src
 file(GLOB_RECURSE type_list_headers
     "C/*.h"
 )
-
+#
 add_library(${PROJECT_NAME} SHARED
     ${type_list_src}
 )
+set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE C)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${type_list_headers}")
 set(HEADERS_INSTALL_DIR include/${PROJECT_NAME})
