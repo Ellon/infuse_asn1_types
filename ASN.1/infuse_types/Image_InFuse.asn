@@ -5,7 +5,7 @@ T-UInt32 FROM TASTE-BasicTypes
 T-Double, T-String FROM TASTE-ExtendedTypes
 Matrix3d, VectorXd FROM Eigen-Types
 Time FROM Time-Types
-Pose-InFuse FROM Pose-InFuse-Types;
+TransformWithCovariance FROM TransformWithCovariance-Types;
 
 --- Definition of enum Image-depth-t follows
 Image-depth-t ::= ENUMERATED
@@ -107,8 +107,8 @@ ImageMetadata-InFuse ::= SEQUENCE
   errValue                       T-Double,                            -- Pixel error value (e.g. dead pixel value)
 
   hasFixedTransform              BOOLEAN,                             -- Is there a fixed transform attached to the image (robot base frame to fixed frame)
-  pose-robotFrame-sensorFrame    Pose-InFuse,	                        -- Transform from sensor to robot frame
-  pose-fixedFrame-robotFrame     Pose-InFuse                          -- Transform from robot frame to fixed frame (can be site frame or world frame). This is used mainly for DEBUG.
+  pose-robotFrame-sensorFrame    TransformWithCovariance,	                        -- Transform from sensor to robot frame
+  pose-fixedFrame-robotFrame     TransformWithCovariance                          -- Transform from robot frame to fixed frame (can be site frame or world frame). This is used mainly for DEBUG.
 }
 
 --- Definition of ImageStamped-InFuse
