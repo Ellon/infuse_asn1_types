@@ -14,31 +14,39 @@ BASE_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 echo "$BASE_DIR"
 
 #set ASN and C diretories
-ASN_DIR=$BASE_DIR/ASN.1
-C_DIR=$BASE_DIR/C
+ASN1_DIR=$BASE_DIR/ASN.1
+ASN1_OUT_DIR=$BASE_DIR/C
 ASN1SCC=asn1scc
 
-rm -rf $C_DIR/*
-mkdir -p $C_DIR
+echo "Input directory (ASN.1): ${ASN1_DIR}"
+echo "Output directory (C):    ${ASN1_OUT_DIR}"
 
-# binary can be compiled from https://github.com/ttsiodras/asn1scc
-# or downloaded from https://download.tuxfamily.org/taste/ASN1SCC/
-if [ ! -d "$ASN1SCC" ]; then
-	echo "Downloading compiler"
-	wget https://download.tuxfamily.org/taste/ASN1SCC/ASN1SCC-latest.tgz
-	tar -xf ASN1SCC-latest.tgz
-	rm ASN1SCC-latest.tgz
-	echo "Done."
+rm -rf "${ASN1_OUT_DIR}"
+mkdir -p "${ASN1_OUT_DIR}"
+#
+#
+# The ASN1SCC compiler can be built from its sources cloned from https://github.
+# com/ttsiodras/asn1scc or downloaded in precompiled form from https://download.
+# tuxfamily.org/taste/ASN1SCC
+ASN1_COMPILER=asn1scc/asn1.exe
+if [[ -f "${ASN1_COMPILER}" ]]; then
+  echo "ASN1SCC compiler: ${ASN1_COMPILER}"
 else
-	echo "Reusing compiler in folder $ASN1SCC"
+  echo "ASN1SCC compiler not found in current directory"
+  echo "Downloading ASN1SCC compiler"
+  wget --quiet https://download.tuxfamily.org/taste/ASN1SCC/ASN1SCC-latest.tgz
+  echo "Downloading ASN1SCC compiler: done"
+  echo "Extracting ASN1SCC compiler in current directory"
+  tar xf ASN1SCC-latest.tgz
+  rm -f ASN1SCC-latest.tgz
+  echo "Extracting ASN1SCC compiler in current directory: done"
 fi
-#
-#
-#Compile ASN files To C
-# has to be a oneliner, else the compiler misses definitions
-echo "Compiling $ASN_DIR to $C_DIR"
-asnFiles=`find $ASN_DIR -name '*.asn'`
-#echo $asnFiles
-mono ./asn1scc/asn1.exe $asnFiles -c -uPER -o $C_DIR
-echo "Done."
+
+# Compile ASN.1 files to C files
+ASN1_PREFIX=asn1Scc
+echo "Compiling ASN.1 data types to C"
+find "${ASN1_DIR}" -name \*.asn -print0 |
+  xargs -0 mono "${ASN1_COMPILER}" \
+    -c -typePrefix ${ASN1_PREFIX} -uPER -wordSize 8 -ACN -o "${ASN1_OUT_DIR}"
+echo "Compiling ASN.1 data types to C: done"
 
