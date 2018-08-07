@@ -47,6 +47,9 @@ include(GNUInstallDirs)
 #   * <prefix>/include/
 set(config_install_dir "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
 
+# This is exclusive for pkg-config
+set(pkgconfig_install_dir "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+
 
 set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
 
@@ -54,6 +57,7 @@ set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
 # Configuration
 set(version_config "${generated_dir}/${PROJECT_NAME}ConfigVersion.cmake")
 set(project_config "${generated_dir}/${PROJECT_NAME}Config.cmake")
+set(pkgconfig_file "${generated_dir}/${PROJECT_NAME}.pc")
 set(TARGETS_EXPORT_NAME "${PROJECT_NAME}Targets")
 set(namespace "${PROJECT_NAME}::")
 
@@ -84,6 +88,18 @@ configure_package_config_file(
       CMAKE_INSTALL_INCLUDEDIR
 )
 
+# Configure '<PROJECT-NAME>.pc'
+# Uses variables:
+#   * PROJECT_NAME
+#   * PROJECT_VERSION
+#   * CMAKE_INSTALL_PREFIX
+#   * CMAKE_INSTALL_LIBDIR
+#   * CMAKE_INSTALL_INCLUDEDIR
+configure_file(
+    "cmake/pkgconfig.pc.cmakein"
+    "${pkgconfig_file}" @ONLY
+)
+
 
 ####
 # Installation
@@ -111,6 +127,13 @@ install(
     FILES "${project_config}" "${version_config}"
     DESTINATION "${config_install_dir}"
 )
+
+
+# Config
+#   * <prefix>/lib/pkgconfig/${PROJECT_NAME}.pc
+install(
+    FILES "${pkgconfig_file}"
+    DESTINATION "${pkgconfig_install_dir}")
 
 
 # Config
