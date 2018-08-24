@@ -1,0 +1,44 @@
+MultiLayeredMap-Types DEFINITIONS ::=
+BEGIN
+IMPORTS 
+T-UInt32 FROM TASTE-BasicTypes
+T-Float FROM TASTE-ExtendedTypes;
+
+--- Max DEM size (manually defined)
+
+-- 1200(width) x 1200 (height)
+demMaxSize      T-UInt32        ::= 1440000
+demLayers       INTEGER         ::= 7
+
+-- When copying data, we want to do one big memcpy : 7(number of layers) x 1200(width) x 1200(height)
+demNumberofElements T-UInt32    ::= 10080000
+
+
+DemCellState ::= ENUMERATED
+{
+    empty      (0),
+    filled     (1)
+}
+
+MultiLayeredMap ::= SEQUENCE
+{
+--    header          Header,
+    
+    currentTile     SEQUENCE(SIZE(2)) OF INTEGER,
+    nbLines         INTEGER,
+    nbCols          INTEGER,
+    xOrigin         T-Float,
+    yOrigin         T-Float,
+
+    scale          T-Float,
+
+    zOrigin         T-Float,
+    zScale          T-Float,
+
+    state           SEQUENCE(SIZE(0..demMaxSize)) OF DemCellState,
+
+    zValue          SEQUENCE(SIZE(0..demNumberofElements)) OF T-Float
+}
+
+
+END
