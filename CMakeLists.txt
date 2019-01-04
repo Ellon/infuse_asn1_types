@@ -9,11 +9,11 @@ project(infuse_asn1_types VERSION 0.3 )
 
 ####
 # Execute script to generate *.c and *.h files from *.asn files
-execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/GeneratorScript.sh
-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                OUTPUT_VARIABLE GENERATOR_SCRIPT_OUTPUT
-                ERROR_VARIABLE GENERATOR_SCRIPT_OUTPUT)
-message(STATUS ${GENERATOR_SCRIPT_OUTPUT})
+#execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/GeneratorScript.sh
+#                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+#                OUTPUT_VARIABLE GENERATOR_SCRIPT_OUTPUT
+#                ERROR_VARIABLE GENERATOR_SCRIPT_OUTPUT)
+#message(STATUS ${GENERATOR_SCRIPT_OUTPUT})
 
 
 ####
