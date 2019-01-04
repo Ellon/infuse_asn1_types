@@ -19,6 +19,10 @@ message(STATUS ${GENERATOR_SCRIPT_OUTPUT})
 ####
 # Generate target
 file(GLOB_RECURSE type_list_src "C/*.c")
+if(NOT type_list_src)
+  message(FATAL_ERROR "Found no source files on ${CMAKE_CURRENT_SOURCE_DIR}/C/. This probably means that the generation of source files from asn1 files failed. Please check if you have mono installed and verify that running GeneratorScript.sh generates the required files.")
+endif()
+
 add_library(${PROJECT_NAME} SHARED ${type_list_src})
 
 
